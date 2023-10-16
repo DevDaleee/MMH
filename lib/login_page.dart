@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mmh/components/cmp_deco_auth_camp.dart';
+import 'package:mmh/components/validations_mixin.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> with ValidationsMixin {
   bool login = true;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
@@ -31,12 +32,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
                       decoration: getAutenticationInputDecoration('E-mail'),
-                      validator: (email) {
-                        if (email == null || email.isEmpty) {
-                          return 'Digite seu e-mail';
-                        }
-                        return null;
-                      },
+                      validator: (email) => combine([
+                        () => isNotEmpty(email),
+                        () => hasFiveChars(email),
+                        () => validacaoEmail(email!),
+                      ]),
                     ),
                     const SizedBox(
                       height: 15,
@@ -45,12 +45,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _senha,
                       obscureText: true,
                       decoration: getAutenticationInputDecoration('Senha'),
-                      validator: (senha) {
-                        if (senha == null || senha.isEmpty) {
-                          return 'Digite sua senha';
-                        }
-                        return null;
-                      },
+                      validator: (email) => combine([
+                        () => isNotEmpty(email),
+                        () => hasFiveChars(email),
+                        () => validacaoEmail(email!),
+                      ]),
                     ),
                     const SizedBox(
                       height: 15,
@@ -61,14 +60,12 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           TextFormField(
                             controller: _nick,
-                            obscureText: true,
                             decoration: getAutenticationInputDecoration('Nick'),
-                            validator: (nick) {
-                              if (nick == null || nick.isEmpty) {
-                                return 'Digite seu Nick';
-                              }
-                              return null;
-                            },
+                            validator: (email) => combine([
+                              () => isNotEmpty(email),
+                              () => hasFiveChars(email),
+                              () => validacaoEmail(email!),
+                            ]),
                           ),
                         ],
                       ),

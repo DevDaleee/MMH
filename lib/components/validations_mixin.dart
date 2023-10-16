@@ -11,7 +11,22 @@ mixin ValidationsMixin {
     return null;
   }
 
-  String? validacaoCompleta(List<String? Function()> validators) {
+  String? validacaoEmail(String value) {
+    if (!value.contains('@')) {
+      return 'Por Favor Digite um Email Valido';
+    }
+    return null;
+  }
+
+  String? validarSenha(String value) {
+    if (value.length < 4) {
+      return 'A senha deve ter mais de 4 caracteres';
+    }
+
+    return null;
+  }
+
+  String? combine(List<String? Function()> validators) {
     for (final func in validators) {
       final validation = func();
       if (validation != null) return validation;
