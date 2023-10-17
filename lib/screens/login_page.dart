@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mmh/components/cmp_deco_auth_camp.dart';
+import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +17,8 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
   final _email = TextEditingController();
   final _nick = TextEditingController();
   final _senha = TextEditingController();
+
+  final ServiceAuth _autenticacaoservico = ServiceAuth();
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +36,13 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
                       decoration: getAutenticationInputDecoration('E-mail'),
-                      validator: (email) => combine([
-                        () => isNotEmpty(email),
-                        () => hasFiveChars(email),
-                        () => validacaoEmail(email!),
-                      ]),
+                      validator: (email) => combine(
+                        [
+                          () => isNotEmpty(email),
+                          () => hasFiveChars(email),
+                          () => validacaoEmail(email!),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -45,11 +51,13 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                       controller: _senha,
                       obscureText: true,
                       decoration: getAutenticationInputDecoration('Senha'),
-                      validator: (email) => combine([
-                        () => isNotEmpty(email),
-                        () => hasFiveChars(email),
-                        () => validacaoEmail(email!),
-                      ]),
+                      validator: (senha) => combine(
+                        [
+                          () => isNotEmpty(senha),
+                          () => hasFiveChars(senha),
+                          () => validarSenha(senha!)
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -61,11 +69,12 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                           TextFormField(
                             controller: _nick,
                             decoration: getAutenticationInputDecoration('Nick'),
-                            validator: (email) => combine([
-                              () => isNotEmpty(email),
-                              () => hasFiveChars(email),
-                              () => validacaoEmail(email!),
-                            ]),
+                            validator: (nick) => combine(
+                              [
+                                () => isNotEmpty(nick),
+                                () => hasFiveChars(nick),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -82,7 +91,9 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.black),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              botaoPrincipalClicado();
+                            },
                             child: Text(
                               (login) ? 'Entrar' : 'Cadastrar',
                               style: const TextStyle(color: Colors.white),
@@ -109,5 +120,35 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
         ),
       ),
     );
+  }
+
+  botaoPrincipalClicado() {
+    String nick = _nick.text;
+    String email = _email.text;
+    String senha = _senha.text;
+
+    if (_formKey.currentState!.validate()) {
+      if (login) {
+        _autenticacaoservico
+            .fazerLogin(email: email, senha: senha)
+            .then((String? erro) {
+          if (erro != null) {
+            showSnackBar(context: context, texto: erro);
+          }
+        });
+      } else {
+        _autenticacaoservico
+            .cadastrarUsuario(nick: nick, email: email, senha: senha)
+            .then(
+          (String? erro) {
+            if (erro != null) {
+              showSnackBar(context: context, texto: erro);
+            }
+          },
+        );
+      }
+    } else {
+      print("Form Inválido");
+    }
   }
 }
