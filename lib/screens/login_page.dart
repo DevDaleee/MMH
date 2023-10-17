@@ -35,6 +35,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
+                      onTapOutside: (event) => FocusScope.of(context).unfocus(),
                       decoration: getAutenticationInputDecoration('E-mail'),
                       validator: (email) => combine(
                         [
@@ -50,6 +51,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                     TextFormField(
                       controller: _senha,
                       obscureText: true,
+                      onTapOutside: (event) => FocusScope.of(context).unfocus(),
                       decoration: getAutenticationInputDecoration('Senha'),
                       validator: (senha) => combine(
                         [
@@ -68,11 +70,12 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                         children: [
                           TextFormField(
                             controller: _nick,
+                            onTapOutside: (event) =>
+                                FocusScope.of(context).unfocus(),
                             decoration: getAutenticationInputDecoration('Nick'),
                             validator: (nick) => combine(
                               [
                                 () => isNotEmpty(nick),
-                                () => hasFiveChars(nick),
                               ],
                             ),
                           ),
@@ -80,16 +83,17 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                       ),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 10,
                     ),
                     SizedBox(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF9F5D20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 35),
                             ),
                             onPressed: () {
                               botaoPrincipalClicado();
@@ -99,16 +103,25 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                               style: const TextStyle(color: Colors.white),
                             ),
                           ),
+                          const SizedBox(
+                            height: 16,
+                          ),
                           const Divider(),
                           TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  login = !login;
-                                });
-                              },
-                              child: Text((login)
+                            onPressed: () {
+                              setState(() {
+                                login = !login;
+                              });
+                            },
+                            child: Text(
+                              (login)
                                   ? "Ainda não tem uma conta?  Cadastre-se!"
-                                  : "Já tem uma conta? Entre!")),
+                                  : "Já tem uma conta? Entre!",
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -147,8 +160,6 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
           },
         );
       }
-    } else {
-      print("Form Inválido");
     }
   }
 }
