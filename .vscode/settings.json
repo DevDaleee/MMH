@@ -1,4 +1,5 @@
 {
     "cmake.sourceDirectory": "/home/devdalee/Faculdade/POO2/mmh/linux/flutter",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "dart.openDevTools": "never"
 }

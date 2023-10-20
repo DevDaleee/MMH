@@ -2,13 +2,13 @@ import 'package:mmh/classes/entities.dart';
 
 class Game {
   int id;
-  Entities entitie_of_the_day;
+  Entities eotd;
   int trys;
   int points;
 
   Game({
     required this.id,
-    required this.entitie_of_the_day,
+    required this.eotd,
     required this.trys,
     required this.points,
   });
@@ -16,7 +16,7 @@ class Game {
   factory Game.toMap(map) {
     return Game(
       id: map['id'] ?? 0,
-      entitie_of_the_day: map['entitie_of_the_day'] ?? "Não Informado",
+      eotd: map['entitie_of_the_day'] ?? "Não Informado",
       trys: map['trys'] ?? 0,
       points: map['points'] ?? 0,
     );

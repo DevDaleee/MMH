@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mmh/screens/main_page.dart';
+import 'package:mmh/screens/root.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -37,7 +37,7 @@ class RoteadorTela extends StatelessWidget {
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const TelaInicial();
+          return const Root();
         } else {
           return const LoginPage();
         }
