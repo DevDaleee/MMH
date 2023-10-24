@@ -50,6 +50,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                     ),
                     TextFormField(
                       controller: _senha,
+                      style: const TextStyle(color: Colors.white),
                       obscureText: true,
                       onTapOutside: (event) => FocusScope.of(context).unfocus(),
                       decoration: getAutenticationInputDecoration('Senha'),
@@ -91,7 +92,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF9F5D20),
+                              backgroundColor: const Color(0xffA6BD94),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 35),
                             ),
@@ -100,7 +101,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                             },
                             child: Text(
                               (login) ? 'Entrar' : 'Cadastrar',
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Color(0xFF38453E)),
                             ),
                           ),
                           const SizedBox(
@@ -118,7 +119,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                                   ? "Ainda não tem uma conta?  Cadastre-se!"
                                   : "Já tem uma conta? Entre!",
                               style: const TextStyle(
-                                color: Colors.black,
+                                color: Color(0xffA6BD94),
                               ),
                             ),
                           ),

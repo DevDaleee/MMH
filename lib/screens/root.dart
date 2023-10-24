@@ -32,13 +32,18 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF38453E),
+        iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
+      ),
       drawer: Drawer(
+        backgroundColor: const Color(0xff38453E),
         child: ListView(
-          children: [
+          children: <Widget>[
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Sair"),
+              textColor: Colors.white,
               onTap: () {
                 ServiceAuth().sair();
               },
@@ -50,6 +55,13 @@ class _RootState extends State<Root> {
         child: _children[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedFontSize: 17.0,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        backgroundColor: const Color(0xff38453E),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -64,6 +76,9 @@ class _RootState extends State<Root> {
             label: "Ranking",
           )
         ],
+        unselectedItemColor: Colors.white,
+        unselectedFontSize: 14,
+        selectedItemColor: const Color(0xffA6BD94),
         currentIndex: _currentIndex,
         onTap: _onTap,
       ),

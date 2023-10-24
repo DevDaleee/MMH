@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 BottomNavigationBar navbar() {
   return BottomNavigationBar(
+    backgroundColor: const Color(0x0038453E),
     items: const [
       BottomNavigationBarItem(
         icon: Icon(Icons.people),

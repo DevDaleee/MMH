@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Minecraft Mistery Hunt',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        scaffoldBackgroundColor: const Color(0xFF38453E),
         useMaterial3: true,
       ),
       home: const RoteadorTela(),
