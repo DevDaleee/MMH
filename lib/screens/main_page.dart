@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mmh/classes/user.dart';
 
 class TelaInicial extends StatefulWidget {
-  const TelaInicial({super.key});
+  const TelaInicial({super.key, required User user});
 
   @override
   State<TelaInicial> createState() => _TelaInicialState();

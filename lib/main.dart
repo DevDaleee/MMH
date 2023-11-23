@@ -1,20 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mmh/classes/rest_client.dart';
+import 'package:mmh/classes/user.dart';
+import 'package:mmh/core/dio_client.dart';
 import 'package:mmh/screens/login_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:mmh/screens/root.dart';
-import 'firebase_options.dart';
+import 'package:mmh/screens/main_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    GetIt.I.registerLazySingleton<RestClient>(() => DioClient());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,15 +42,13 @@ class RoteadorTela extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.userChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const Root();
-        } else {
-          return const LoginPage();
-        }
-      },
-    );
+    //var usuarioAutenticado = const LoginPage();
+    //if (usuarioAutenticado != null) {
+      // return TelaInicial(
+      //   user: usuarioAutenticado as User,
+      // );
+    //} else {
+      return const LoginPage();
+    //}
   }
 }

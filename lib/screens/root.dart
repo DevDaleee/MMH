@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mmh/screens/main_page.dart';
-import 'package:mmh/screens/profile_page.dart';
-import 'package:mmh/screens/ranking_page.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/named_routes.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -14,9 +11,9 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   var _currentIndex = 1;
   final _children = [
-    const ProfilePage(),
-    const TelaInicial(),
-    const RankingPage(),
+    ProfileViewRoute,
+    InitialViemRoute,
+    RankingViewRoute,
   ];
 
   _onTap(int tab) {
@@ -44,15 +41,13 @@ class _RootState extends State<Root> {
               leading: const Icon(Icons.logout),
               title: const Text("Sair"),
               textColor: Colors.white,
-              onTap: () {
-                ServiceAuth().sair();
-              },
+              onTap: () {},
             )
           ],
         ),
       ),
       body: Center(
-        child: _children[_currentIndex],
+        child: Text(_children[_currentIndex]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mmh/classes/user.dart';
 
 class RankingPage extends StatefulWidget {
-  const RankingPage({super.key});
+  const RankingPage({super.key, required User user});
 
   @override
   State<RankingPage> createState() => _RankingPageState();
