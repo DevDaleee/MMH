@@ -12,7 +12,7 @@ class User {
     required this.email,
     this.points,
   });
-  factory User.toMap(Map<String, dynamic> map) {
+  factory User.toMap(map) {
     return User(
       id: map['id'] ?? 0,
       nick: map['nome'] ?? "Não Informado",

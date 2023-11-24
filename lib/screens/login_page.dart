@@ -47,7 +47,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
       token = response['access_token'];
       await sharedPreferences.setString('access_token', token);
 
-      Navigator.pushNamed(context, InitialViemRoute);
+      Navigator.pushNamed(context, RootViewRoute);
     } catch (error) {
       print(error);
       showDialog(
@@ -82,6 +82,14 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                 key: _formKey,
                 child: Column(
                   children: [
+                    SizedBox(
+                      width: 300,
+                      height: 300,
+                      child: Image.asset("assets/images/MMH_Logo.png"),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
                     TextFormField(
                       controller: _email,
                       style: const TextStyle(color: Colors.white),

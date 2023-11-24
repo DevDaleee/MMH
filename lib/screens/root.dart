@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mmh/named_routes.dart';
+import 'package:mmh/screens/main_page.dart';
+import 'package:mmh/screens/profile_page.dart';
+import 'package:mmh/screens/ranking_page.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -11,9 +13,9 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   var _currentIndex = 1;
   final _children = [
-    ProfileViewRoute,
-    InitialViemRoute,
-    RankingViewRoute,
+    const RankingPage(),
+    const TelaInicial(),
+    const ProfilePage(),
   ];
 
   _onTap(int tab) {
@@ -34,7 +36,7 @@ class _RootState extends State<Root> {
         iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
       ),
       drawer: Drawer(
-        backgroundColor: const Color(0xff38453E),
+        backgroundColor: Colors.white,
         child: ListView(
           children: <Widget>[
             ListTile(
@@ -46,9 +48,7 @@ class _RootState extends State<Root> {
           ],
         ),
       ),
-      body: Center(
-        child: Text(_children[_currentIndex]),
-      ),
+      body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,
@@ -57,6 +57,11 @@ class _RootState extends State<Root> {
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
         backgroundColor: const Color(0xff38453E),
+        unselectedItemColor: Colors.white,
+        unselectedFontSize: 14,
+        selectedItemColor: const Color(0xffA6BD94),
+        currentIndex: _currentIndex,
+        onTap: _onTap,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -71,11 +76,6 @@ class _RootState extends State<Root> {
             label: "Ranking",
           )
         ],
-        unselectedItemColor: Colors.white,
-        unselectedFontSize: 14,
-        selectedItemColor: const Color(0xffA6BD94),
-        currentIndex: _currentIndex,
-        onTap: _onTap,
       ),
     );
   }
