@@ -1,7 +1,9 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
+import 'package:mmh/named_routes.dart';
+import 'package:mmh/screens/login_page.dart';
 import 'package:mmh/screens/main_page.dart';
-import 'package:mmh/screens/profile_page.dart';
-import 'package:mmh/screens/ranking_page.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -11,23 +13,6 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  var _currentIndex = 1;
-  final _children = [
-    const RankingPage(),
-    const TelaInicial(),
-    const ProfilePage(),
-  ];
-
-  _onTap(int tab) {
-    if (_currentIndex != tab) {
-      setState(
-        () {
-          _currentIndex = tab;
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,48 +20,69 @@ class _RootState extends State<Root> {
         backgroundColor: const Color(0xFF38453E),
         iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text("Sair"),
-              textColor: Colors.white,
-              onTap: () {},
-            )
-          ],
+      drawer: Container(
+        width: 260,
+        child: Drawer(
+          backgroundColor: const Color(0xFF38453E),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 30.0),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      ListTile(
+                        leading:
+                            const Icon(Icons.person, color: Color(0xffA6BD94)),
+                        title: const Text("Perfil"),
+                        textColor: Colors.white,
+                        onTap: () {
+                          Navigator.pushNamed(context, ProfileViewRoute);
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.emoji_events,
+                            color: Color(0xffA6BD94)),
+                        title: const Text("Rank"),
+                        textColor: Colors.white,
+                        onTap: () {
+                          Navigator.pushNamed(context, RankingViewRoute);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                          (route) => false),
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.exit_to_app,
+                          color: Color(0xffA6BD94),
+                        ),
+                        title: Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      body: _children[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedFontSize: 17.0,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-        backgroundColor: const Color(0xff38453E),
-        unselectedItemColor: Colors.white,
-        unselectedFontSize: 14,
-        selectedItemColor: const Color(0xffA6BD94),
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Perfil",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports_esports),
-            label: "Game",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events),
-            label: "Ranking",
-          )
-        ],
-      ),
+      body: const TelaInicial(),
     );
   }
 }
