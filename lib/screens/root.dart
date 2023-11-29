@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/named_routes.dart';
 import 'package:mmh/screens/main_page.dart';
+import 'package:mmh/services/auth.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -10,8 +12,11 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
+  final _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
+    final user = getUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF38453E),
@@ -19,7 +24,6 @@ class _RootState extends State<Root> {
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF38453E),
-        width: 260,
         child: Column(
           children: <Widget>[
             Expanded(
@@ -34,7 +38,11 @@ class _RootState extends State<Root> {
                       title: const Text("Perfil"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pushNamed(context, ProfileViewRoute);
+                        Navigator.pushNamed(
+                          context,
+                          ProfileViewRoute,
+                          arguments: user,
+                        );
                       },
                     ),
                     ListTile(
@@ -50,15 +58,18 @@ class _RootState extends State<Root> {
                 ),
               ),
             ),
-            const Align(
+            Align(
               alignment: Alignment.bottomCenter,
               child: ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text(
-                  'Sair',
-                  style: TextStyle(color: Colors.white),
+                leading: const Icon(
+                  Icons.logout,
+                  color: Color(0xffA6BD94),
                 ),
-                iconColor: Colors.white,
+                title: const Text("Sair"),
+                textColor: Colors.white,
+                onTap: () {
+                  ServiceAuth().sair();
+                },
               ),
             ),
           ],
@@ -66,5 +77,12 @@ class _RootState extends State<Root> {
       ),
       body: const TelaInicial(),
     );
+  }
+
+  getUser() {
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      return user;
+    }
   }
 }
