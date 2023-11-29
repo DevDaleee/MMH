@@ -1,13 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:mmh/classes/rest_client.dart';
 import 'package:mmh/components/cmp_deco_auth_camp.dart';
 import 'package:mmh/components/loading.dart';
+import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
-import 'package:mmh/named_routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mmh/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,57 +14,12 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> with ValidationsMixin {
   bool login = true;
-  String token = '';
-  final httpClient = GetIt.I.get<RestClient>();
-
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _nick = TextEditingController();
   final _senha = TextEditingController();
 
-  Future loginUser(String email, String password) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    try {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          context = context;
-          return const Loading();
-        },
-      );
-      var response = await httpClient.post(
-        '/login',
-        {
-          "email": email,
-          "password": password,
-        },
-      );
-      token = response['access_token'];
-      await sharedPreferences.setString('access_token', token);
-
-      Navigator.pushNamed(context, RootViewRoute);
-    } catch (error) {
-      print(error);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Login Invalido'),
-            content: const Text('Seu E-mail e/ou senha inválidos'),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
+  final ServiceAuth _autenticacaoservico = ServiceAuth();
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +39,13 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                       child: Image.asset("assets/images/MMH_Logo.png"),
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 25,
                     ),
                     TextFormField(
                       controller: _email,
                       style: const TextStyle(color: Colors.white),
                       keyboardType: TextInputType.emailAddress,
+                      onTapOutside: (event) => FocusScope.of(context).unfocus(),
                       decoration: getAutenticationInputDecoration('E-mail'),
                       validator: (email) => combine(
                         [
@@ -154,10 +106,8 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 35),
                             ),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                await loginUser(_email.text, _senha.text);
-                              }
+                            onPressed: () {
+                              botaoPrincipalClicado();
                             },
                             child: Text(
                               (login) ? 'Entrar' : 'Cadastrar',
@@ -194,5 +144,42 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
         ),
       ),
     );
+  }
+
+  botaoPrincipalClicado() {
+    String nick = _nick.text;
+    String email = _email.text;
+    String senha = _senha.text;
+
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          context = context;
+          return const Loading();
+        },
+      );
+      if (login) {
+        _autenticacaoservico
+            .fazerLogin(email: email, senha: senha)
+            .then((String? erro) {
+          if (erro != null) {
+            showSnackBar(context: context, texto: erro);
+          }
+          Navigator.pop(context);
+        });
+      } else {
+        _autenticacaoservico
+            .cadastrarUsuario(nick: nick, email: email, senha: senha)
+            .then(
+          (String? erro) {
+            if (erro != null) {
+              showSnackBar(context: context, texto: erro);
+            }
+            Navigator.pop(context);
+          },
+        );
+      }
+    }
   }
 }
