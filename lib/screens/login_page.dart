@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/components/cmp_deco_auth_camp.dart';
 import 'package:mmh/components/loading.dart';
@@ -81,6 +82,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                         children: [
                           TextFormField(
                             controller: _nick,
+                            style: const TextStyle(color: Colors.white),
                             onTapOutside: (event) =>
                                 FocusScope.of(context).unfocus(),
                             decoration: getAutenticationInputDecoration('Nick'),
@@ -155,11 +157,12 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          context = context;
           return const Loading();
         },
       );
+
       if (login) {
+        // Lógica para fazer login
         _autenticacaoservico
             .fazerLogin(email: email, senha: senha)
             .then((String? erro) {
@@ -169,16 +172,20 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
           Navigator.pop(context);
         });
       } else {
-        _autenticacaoservico
-            .cadastrarUsuario(nick: nick, email: email, senha: senha)
-            .then(
-          (String? erro) {
-            if (erro != null) {
-              showSnackBar(context: context, texto: erro);
-            }
-            Navigator.pop(context);
-          },
-        );
+        // Criação de um documento no Firestore para registro de usuário
+        FirebaseFirestore.instance.collection('users').add({
+          'nick': nick,
+          'email': email,
+          'senha': senha,
+          'points': 0,
+        }).then((DocumentReference document) {
+          print(
+              'Usuário registrado com sucesso no Firestore. ID do documento: ${document.id}');
+          Navigator.pop(context);
+        }).catchError((error) {
+          print('Erro ao registrar usuário no Firestore: $error');
+          Navigator.pop(context);
+        });
       }
     }
   }

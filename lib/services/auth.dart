@@ -41,4 +41,6 @@ class ServiceAuth {
   Future<void> sair() async {
     return _firebaseAuth.signOut();
   }
+
+  void addCustomer(uid, String email, String senha) {}
 }
