@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Minecraft Mistery Hunt',
         theme: ThemeData(
+          fontFamily: 'Jua',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
           scaffoldBackgroundColor: const Color(0xFF38453E),
           useMaterial3: true,
@@ -43,6 +44,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class GoogleFonts {}
 
 class RoteadorTela extends StatelessWidget {
   const RoteadorTela({super.key});

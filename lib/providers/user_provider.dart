@@ -5,12 +5,9 @@ class UserProvider with ChangeNotifier {
   late String _email;
   late int _points;
 
-//getters:
   String get getNick => _nick;
   String get getEmail => _email;
   int get getPoints => _points;
-
-//Setters:
 
   void changeNickName(String val) {
     _nick = val;

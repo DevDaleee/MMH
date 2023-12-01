@@ -42,6 +42,7 @@ dependencies:
   firebase_app_check: ^0.2.1+6
   provider: ^6.1.1
   uuid: ^4.2.1
+  google_fonts: ^2.1.0 
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - assets/images/
+      - assets/fonts/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -82,10 +84,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+  - family: Jua
+    fonts:
+      - asset: assets/fonts/Jua-Regular.ttf
+        weight: 300
+      - asset: assets/fonts/Jua-Regular.ttf
+        weight: 400
+      - asset: assets/fonts/Jua-Regular.ttf
+        weight: 500
+      - asset: assets/fonts/Jua-Regular.ttf
+        weight: 600
+      - asset: assets/fonts/Jua-Regular.ttf
+        weight: 700
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

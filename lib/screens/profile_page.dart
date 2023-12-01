@@ -15,19 +15,29 @@ class _ProfilePageState extends State<ProfilePage> {
   String? image = '';
   String? points = '';
 
-  Future _getUserData() async {
+  Future<void> _getUserData() async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
-        .then((snapshot) async {
-      if (snapshot.exists) {
-        setState(() {
-          nick = snapshot.data()!["nick"];
-          points = snapshot.data()!["points"];
-        });
-      }
-    });
+        .then(
+      (snapshot) async {
+        if (snapshot.exists) {
+          setState(
+            () {
+              nick = snapshot.data()!["nick"];
+              points = snapshot.data()!["points"];
+            },
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
   }
 
   @override
@@ -81,6 +91,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   ServiceAuth().sair();
                 },
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 10),
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                "./assets/images/big-creeper-face.png",
+                width: 150,
+                height: 150,
+              ),
+            ),
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Olá " + nick!,
+                      style: const TextStyle(color: Colors.white)),
+                ],
               ),
             ),
           ],
