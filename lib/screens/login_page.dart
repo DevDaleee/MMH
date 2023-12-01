@@ -4,6 +4,7 @@ import 'package:mmh/components/cmp_deco_auth_camp.dart';
 import 'package:mmh/components/loading.dart';
 import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/named_routes.dart';
 import 'package:mmh/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -162,7 +163,6 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
       );
 
       if (login) {
-        // Lógica para fazer login
         _autenticacaoservico
             .fazerLogin(email: email, senha: senha)
             .then((String? erro) {
@@ -172,19 +172,23 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
           Navigator.pop(context);
         });
       } else {
-        // Criação de um documento no Firestore para registro de usuário
-        FirebaseFirestore.instance.collection('users').add({
-          'nick': nick,
-          'email': email,
-          'senha': senha,
-          'points': 0,
-        }).then((DocumentReference document) {
-          print(
-              'Usuário registrado com sucesso no Firestore. ID do documento: ${document.id}');
-          Navigator.pop(context);
-        }).catchError((error) {
-          print('Erro ao registrar usuário no Firestore: $error');
-          Navigator.pop(context);
+        _autenticacaoservico
+            .cadastrarUsuario(email: email, senha: senha)
+            .then((String? erroCadastro) {
+          if (erroCadastro != null) {
+            showSnackBar(context: context, texto: erroCadastro);
+            Navigator.pop(context);
+          } else {
+            FirebaseFirestore.instance.collection('users').add({
+              'nick': nick,
+              'email': email,
+              'points': 0,
+            }).then((DocumentReference document) {
+              Navigator.pushNamed(context, InitialViewRoute);
+            }).catchError((error) {
+              showSnackBar(context: context, texto: error.toString());
+            });
+          }
         });
       }
     }

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/named_routes.dart';
 import 'package:mmh/screens/main_page.dart';
@@ -12,11 +11,8 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  final _firebaseAuth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
-    final user = getUser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF38453E),
@@ -38,11 +34,8 @@ class _RootState extends State<Root> {
                       title: const Text("Perfil"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          ProfileViewRoute,
-                          arguments: user,
-                        );
+                        Navigator.of(context)
+                            .pushReplacementNamed(ProfileViewRoute);
                       },
                     ),
                     ListTile(
@@ -77,12 +70,5 @@ class _RootState extends State<Root> {
       ),
       body: const TelaInicial(),
     );
-  }
-
-  getUser() {
-    User? user = _firebaseAuth.currentUser;
-    if (user != null) {
-      return user;
-    }
   }
 }

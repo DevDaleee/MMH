@@ -4,7 +4,6 @@ class ServiceAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<String?> cadastrarUsuario({
-    required String nick,
     required String email,
     required String senha,
   }) async {
@@ -14,13 +13,12 @@ class ServiceAuth {
         email: email,
         password: senha,
       );
-      await userCredential.user!.updateDisplayName(nick);
+      await userCredential.user!.updateDisplayName(email);
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "email-already-in-use") {
         return "O Usuário já está cadastrado";
       }
-
       return "Erro desconhecido";
     }
   }
@@ -41,6 +39,4 @@ class ServiceAuth {
   Future<void> sair() async {
     return _firebaseAuth.signOut();
   }
-
-  void addCustomer(uid, String email, String senha) {}
 }

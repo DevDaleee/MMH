@@ -14,4 +14,9 @@ class User {
       points: map['points'] ?? 0,
     );
   }
+  User.fromFirestore(Map<String, dynamic> firestoreMap)
+      : id = firestoreMap['id'],
+        nick = firestoreMap['nick'],
+        email = firestoreMap['email'],
+        points = firestoreMap['points'];
 }
