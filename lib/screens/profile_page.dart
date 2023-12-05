@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/named_routes.dart';
 import 'package:mmh/services/auth.dart';
@@ -11,44 +10,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String? nick = '';
-  String? image = '';
-  String? points = '';
-
-  Future<void> _getUserData() async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then(
-      (snapshot) async {
-        if (snapshot.exists) {
-          setState(
-            () {
-              nick = snapshot.data()!["nick"];
-              points = snapshot.data()!["points"];
-            },
-          );
-        }
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    _getUserData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF38453E),
+        backgroundColor: const Color(0xFF324E3F),
         iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
       ),
       drawer: Drawer(
-        backgroundColor: const Color(0xFF38453E),
+        backgroundColor: const Color(0xFF324E3F),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -96,28 +66,34 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 10),
-              alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                "./assets/images/big-creeper-face.png",
-                width: 150,
-                height: 150,
-              ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Text('Loading data please Wait');
+          return SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  alignment: Alignment.bottomCenter,
+                  child: Image.asset(
+                    "./assets/images/big-creeper-face.png",
+                    width: 150,
+                    height: 150,
+                  ),
+                ),
+                const Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("nick", style: TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(nick!, style: const TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

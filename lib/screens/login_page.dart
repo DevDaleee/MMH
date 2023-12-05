@@ -172,24 +172,34 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
           Navigator.pop(context);
         });
       } else {
-        _autenticacaoservico
-            .cadastrarUsuario(email: email, senha: senha)
-            .then((String? erroCadastro) {
-          if (erroCadastro != null) {
-            showSnackBar(context: context, texto: erroCadastro);
-            Navigator.pop(context);
-          } else {
-            FirebaseFirestore.instance.collection('users').add({
-              'nick': nick,
-              'email': email,
-              'points': 0,
-            }).then((DocumentReference document) {
-              Navigator.pushNamed(context, InitialViewRoute);
-            }).catchError((error) {
-              showSnackBar(context: context, texto: error.toString());
-            });
-          }
-        });
+        _autenticacaoservico.cadastrarUsuario(email: email, senha: senha).then(
+          (String? erroCadastro) {
+            if (erroCadastro != null) {
+              showSnackBar(context: context, texto: erroCadastro);
+              Navigator.pop(context);
+            } else {
+              String uid = _autenticacaoservico.currentUserUid()!;
+
+              FirebaseFirestore.instance.collection('users').doc(uid).set(
+                {
+                  'nick': nick,
+                  'email': email,
+                  'points': 0,
+                },
+              ).then(
+                (_) {
+                  // Navigator.pop(context);
+                  Navigator.pushNamed(context, InitialViewRoute);
+                },
+              ).catchError(
+                (error) {
+                  showSnackBar(context: context, texto: error.toString());
+                  Navigator.pop(context);
+                },
+              );
+            }
+          },
+        );
       }
     }
   }

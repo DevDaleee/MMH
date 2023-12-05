@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Jua',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-          scaffoldBackgroundColor: const Color(0xFF38453E),
+          scaffoldBackgroundColor: const Color(0xFF324E3F),
           useMaterial3: true,
         ),
         routes: routes,

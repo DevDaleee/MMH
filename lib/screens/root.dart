@@ -15,7 +15,7 @@ class _RootState extends State<Root> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF38453E),
+        backgroundColor: const Color(0xFF324E3F),
         iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
       ),
       drawer: Drawer(

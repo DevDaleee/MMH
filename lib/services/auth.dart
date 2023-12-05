@@ -39,4 +39,9 @@ class ServiceAuth {
   Future<void> sair() async {
     return _firebaseAuth.signOut();
   }
+
+  String? currentUserUid() {
+    User? user = _firebaseAuth.currentUser;
+    return user?.uid;
+  }
 }
