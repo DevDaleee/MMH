@@ -91,11 +91,9 @@ class _RankingPageState extends State<RankingPage> {
           }
 
           if (snapshot.hasData) {
-            // Extract user data from the QuerySnapshot
             List<DocumentSnapshot<Map<String, dynamic>>> userDocs =
                 snapshot.data!.docs;
 
-            // Sort the users based on points
             userDocs.sort((a, b) => (b.data()?['points'] as int)
                 .compareTo(a.data()?['points'] as int));
 
@@ -105,7 +103,6 @@ class _RankingPageState extends State<RankingPage> {
                 var userData = userDocs[index].data();
                 int points = userData?['points'] as int;
 
-                // Calculate the position based on the index (1-indexed)
                 int position = index + 1;
 
                 return Card(
