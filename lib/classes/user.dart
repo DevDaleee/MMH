@@ -1,22 +1,30 @@
-class User {
-  int id;
-  String nick;
-  String email;
-  int? points;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mmh/shared/base_model.dart';
 
-  User(
-      {required this.id, required this.nick, required this.email, this.points});
-  factory User.toMap(map) {
-    return User(
-      id: map['id'] ?? 1,
-      nick: map['nome'] ?? "Não Informado",
-      email: map['email'] ?? "Não Informado",
-      points: map['points'] ?? 0,
-    );
+class User extends BaseModel {
+  late String _documentId;
+  late String nick;
+  late String email;
+  late int? points;
+
+  User.fromMap(DocumentSnapshot document) {
+    _documentId = document.id;
+    Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+    nick = data?['nick'] ?? "Não Informado";
+    email = data?['email'] ?? "Não Informado";
+    points = data?['points'];
   }
-  User.fromFirestore(Map<String, dynamic> firestoreMap)
-      : id = firestoreMap['id'],
-        nick = firestoreMap['nick'],
-        email = firestoreMap['email'],
-        points = firestoreMap['points'];
+
+  @override
+  toMap() {
+    var map = <String, dynamic>{};
+    map['nick'] = nick;
+    map['email'] = email;
+    map['points'] = points;
+    return map;
+  }
+
+  @override
+  String documentId() => _documentId;
 }

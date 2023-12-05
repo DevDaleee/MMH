@@ -1,28 +1,28 @@
 class Entities {
   int id;
+  String category;
+  int health;
   String name;
   String spawn;
-  int health;
   String type;
-  String category;
 
   Entities({
     required this.id,
+    required this.category,
+    required this.health,
     required this.name,
     required this.spawn,
-    required this.health,
     required this.type,
-    required this.category,
   });
 
-  factory Entities.toMap(map) {
+  factory Entities.fromFirestore(Map<String, dynamic> json) {
     return Entities(
-      id: map['id'] ?? 0,
-      name: map['name'] ?? "Não Informado",
-      spawn: map['type'] ?? "Não Informado",
-      health: map['height'] ?? "Não Informado",
-      type: map['width'] ?? "Não Informado",
-      category: map['category'] ?? "Não Informado",
+      id: json['id'] ?? '',
+      category: json['category'] ?? '',
+      health: json['health'] ?? 0,
+      name: json['name'] ?? '',
+      spawn: json['spawn'] ?? '',
+      type: json['type'] ?? '',
     );
   }
 }

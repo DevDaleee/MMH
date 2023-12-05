@@ -112,8 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Olá " + nick!,
-                      style: const TextStyle(color: Colors.white)),
+                  Text(nick!, style: const TextStyle(color: Colors.white)),
                 ],
               ),
             ),
