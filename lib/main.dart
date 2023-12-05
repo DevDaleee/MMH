@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:mmh/routes.dart';
 import 'package:mmh/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mmh/screens/root.dart';
-import 'package:mmh/services/get_entities.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -15,22 +13,11 @@ const kWebRecaptchaSiteKey = 'f702b7a3-681e-45cc-8f52-5d218a340586';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.appAttest,
     webProvider: ReCaptchaV3Provider(kWebRecaptchaSiteKey),
-  );
-  late int periodicTaskId = 0;
-
-  await AndroidAlarmManager.periodic(
-    const Duration(days: 1),
-    periodicTaskId,
-    EntityService().getEntity,
-    wakeup: true,
-    startAt: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0),
   );
   runApp(const MyApp());
 }
