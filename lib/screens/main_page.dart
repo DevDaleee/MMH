@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/services/get_entities.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -12,6 +13,19 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
   final _formKey = GlobalKey<FormState>();
   final _try = TextEditingController();
   final tentativas = 10;
+  final tFeitas = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getEntitiy();
+  }
+
+  Future getEntitiy() async {
+    EntityService entityService = EntityService();
+    await entityService.getEntity();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -62,16 +76,16 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                 const SizedBox(
                   height: 20,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "Suas Tentativas",
-                      style: TextStyle(color: Color(0xffA6BD94)),
+                      "Suas Tentativas: $tFeitas",
+                      style: const TextStyle(color: Color(0xffA6BD94)),
                     ),
                     Text(
-                      "Tentativas Restantes",
-                      style: TextStyle(color: Color(0xffA6BD94)),
+                      "Tentativas Restantes: $tentativas",
+                      style: const TextStyle(color: Color(0xffA6BD94)),
                     ),
                   ],
                 ),

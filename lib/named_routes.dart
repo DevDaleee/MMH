@@ -4,3 +4,4 @@ const String InitialViewRoute = '/inicial';
 const String LoginViewRoute = '/login';
 const String ProfileViewRoute = '/profile';
 const String RankingViewRoute = '/rank';
+const String EntitiesTipsViewRoute = '/helpPage';

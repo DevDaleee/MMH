@@ -51,6 +51,15 @@ class _RankingPageState extends State<RankingPage> {
                         Navigator.pushNamed(context, ProfileViewRoute);
                       },
                     ),
+                    ListTile(
+                      leading: const Icon(Icons.help_center,
+                          color: Color(0xffA6BD94)),
+                      title: const Text("Entidades"),
+                      textColor: Colors.white,
+                      onTap: () {
+                        Navigator.pushNamed(context, EntitiesTipsViewRoute);
+                      },
+                    ),
                   ],
                 ),
               ),
