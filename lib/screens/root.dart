@@ -60,8 +60,8 @@ class _RootState extends State<Root> {
                 ),
                 title: const Text("Sair"),
                 textColor: Colors.white,
-                onTap: () {
-                  ServiceAuth().sair();
+                onTap: () async {
+                  await ServiceAuth().sair();
                 },
               ),
             ),

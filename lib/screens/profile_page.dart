@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/named_routes.dart';
 import 'package:mmh/services/auth.dart';
@@ -10,6 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,33 +68,69 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+      body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(auth.currentUser?.uid)
+            .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Loading data please Wait');
-          return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(top: 10),
-                  alignment: Alignment.bottomCenter,
-                  child: Image.asset(
-                    "./assets/images/big-creeper-face.png",
-                    width: 150,
-                    height: 150,
-                  ),
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('Loading data please wait');
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Error loading data'),
+                ],
+              ),
+            );
+          }
+
+          if (snapshot.hasData && snapshot.data?.exists == true) {
+            var userData = snapshot.data!.data();
+            int points = snapshot.data?.data()?['points'] as int;
+
+            if (userData != null && userData.containsKey('nick')) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      alignment: Alignment.bottomCenter,
+                      child: Image.asset(
+                        "./assets/images/big-creeper-face.png",
+                        width: 150,
+                        height: 150,
+                      ),
+                    ),
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            userData['nick'] as String,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30),
+                          ),
+                          Center(
+                            child: Text(
+                              "Pontos: $points",
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("nick", style: TextStyle(color: Colors.white)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
+              );
+            }
+          }
+          return const Text('Data not available');
         },
       ),
     );
