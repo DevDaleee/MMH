@@ -70,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: const Text("Sair"),
                 textColor: Colors.white,
                 onTap: () {
-                  ServiceAuth().sair();
+                  ServiceAuth().sair(context);
                 },
               ),
             ),

@@ -1,13 +1,14 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mmh/classes/entities.dart';
 
 class EntityService {
   final CollectionReference entitiesCollection =
-      FirebaseFirestore.instance.collection('entities');
+      FirebaseFirestore.instance.collection('entitieOfTheDay');
 
-  Future<void> getEntity() async {
-    Object randomEntity = await getRandomEntity();
-    print(randomEntity);
+  Future<Entities> getEntity() async {
+    Object etod = await getRandomEntity();
+    return etod as Entities;
   }
 
   Future<Object> getRandomEntity() async {

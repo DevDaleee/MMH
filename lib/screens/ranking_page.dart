@@ -74,7 +74,7 @@ class _RankingPageState extends State<RankingPage> {
                 title: const Text("Sair"),
                 textColor: Colors.white,
                 onTap: () {
-                  ServiceAuth().sair();
+                  ServiceAuth().sair(context);
                 },
               ),
             ),

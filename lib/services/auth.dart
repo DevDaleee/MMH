@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:mmh/named_routes.dart';
 
 class ServiceAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -36,8 +40,11 @@ class ServiceAuth {
     }
   }
 
-  Future<void> sair() async {
-    return _firebaseAuth.signOut();
+  Future<void> sair(BuildContext context) async {
+    await _firebaseAuth.signOut().then(
+          Navigator.pushReplacementNamed(context, LoginViewRoute) as FutureOr
+              Function(void value),
+        );
   }
 
   String? currentUserUid() {
