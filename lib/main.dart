@@ -7,7 +7,6 @@ import 'package:mmh/routes.dart';
 import 'package:mmh/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mmh/screens/root.dart';
-import 'package:mmh/services/get_entities.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -21,16 +20,6 @@ Future main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.appAttest,
     webProvider: ReCaptchaV3Provider(kWebRecaptchaSiteKey),
-  );
-  late int periodicTaskId = 0;
-
-  await AndroidAlarmManager.periodic(
-    const Duration(days: 1),
-    periodicTaskId,
-    EntityService().getEntity,
-    wakeup: true,
-    startAt: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0),
   );
   runApp(const MyApp());
 }

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:mmh/classes/entities.dart';
 import 'package:mmh/components/validations_mixin.dart';
 import 'package:mmh/services/get_entities.dart';
 
@@ -21,9 +24,14 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
     getEntitiy();
   }
 
-  Future getEntitiy() async {
-    EntityService entityService = EntityService();
-    await entityService.getEntity();
+  Future<Object> getEntitiy() async {
+    try {
+      EntityService entityService = EntityService();
+      await entityService.getEntity();
+      return entityService as Entities;
+    } catch (e) {
+      return EntityService();
+    }
   }
 
   @override

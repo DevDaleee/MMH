@@ -5,6 +5,7 @@ class Entities {
   String name;
   String spawn;
   String type;
+  int streak;
 
   Entities({
     required this.id,
@@ -13,6 +14,7 @@ class Entities {
     required this.name,
     required this.spawn,
     required this.type,
+    required this.streak,
   });
 
   factory Entities.fromFirestore(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Entities {
       name: json['name'] ?? '',
       spawn: json['spawn'] ?? '',
       type: json['type'] ?? '',
+      streak: json['streak'] ?? 0,
     );
   }
 }

@@ -101,6 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
           if (snapshot.hasData && snapshot.data?.exists == true) {
             var userData = snapshot.data!.data();
             int points = snapshot.data?.data()?['points'] as int;
+            int streak = snapshot.data?.data()?['streak'] as int;
 
             if (userData != null && userData.containsKey('nick')) {
               return SingleChildScrollView(
@@ -117,20 +118,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Center(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             userData['nick'] as String,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 30),
                           ),
-                          Center(
-                            child: Text(
-                              "Pontos: $points",
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 15),
-                            ),
-                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Pontos: $points",
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  "Streak: $streak",
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                  textAlign: TextAlign.right,
+                                ),
+                              ]),
                         ],
                       ),
                     ),
