@@ -118,11 +118,12 @@ class _RankingPageState extends State<RankingPage> {
                   child: ListTile(
                     title: Text(
                       userData?['nick'] as String,
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
+                      style: const TextStyle(
+                          color: Color(0xFF324E3F), fontSize: 18),
                     ),
                     subtitle: Text(
-                      "Points: $points - Position: $position",
-                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      "Points: $points",
+                      style: const TextStyle(color: Colors.black, fontSize: 15),
                     ),
                     leading: CircleAvatar(
                       backgroundColor: const Color(0xffA6BD94),

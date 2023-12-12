@@ -19,12 +19,12 @@ class User extends BaseModel {
 
     email = data?['email'] ?? "Não Informado";
     nick = data?['nick'] ?? "Não Informado";
-    gamesPlayed = statistics.totalGamesPlayed;
-    gamesWon = statistics.totalGamesWon;
-    maxStreak = statistics.maxStreak;
+    gamesPlayed = statistics.totalGamesPlayed ?? 0;
+    gamesWon = statistics.totalGamesWon ?? 0;
+    maxStreak = statistics.maxStreak ?? 0;
     points = data?['points'] ?? 0;
-    streak = statistics.currentStreak;
-    winPercentage = statistics.winPercentage.toDouble();
+    streak = statistics.currentStreak ?? 0;
+    winPercentage = statistics.winPercentage.toDouble() ?? 0;
   }
 
   @override
@@ -32,7 +32,6 @@ class User extends BaseModel {
     var map = <String, dynamic>{};
     map['email'] = email;
     map['nick'] = nick;
-    // Use the UserStatistics values for gamesPlayed, gamesWon, maxStreak, streak, and winPercentage
     map['gamesPlayed'] = gamesPlayed;
     map['gamesWon'] = gamesWon;
     map['maxStreak'] = maxStreak;
