@@ -184,8 +184,12 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                 {
                   'nick': nick,
                   'email': email,
-                  'points': 0,
-                  'streak': 0,
+                  "gamesPlayed": 0,
+                  "gamesWon": 0,
+                  "maxStreak": 0,
+                  "points": 0,
+                  "streak": 0,
+                  "winPercentage": 0,
                 },
               ).then(
                 (_) {
