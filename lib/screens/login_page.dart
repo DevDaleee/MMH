@@ -185,6 +185,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                   'nick': nick,
                   'email': email,
                   'points': 0,
+                  'streak': 0,
                 },
               ).then(
                 (_) {

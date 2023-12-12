@@ -19,7 +19,10 @@ Future main() async {
     appleProvider: AppleProvider.appAttest,
     webProvider: ReCaptchaV3Provider(kWebRecaptchaSiteKey),
   );
+<<<<<<< HEAD
 
+=======
+>>>>>>> Criando_Logica_Jogo
   runApp(const MyApp());
 }
 

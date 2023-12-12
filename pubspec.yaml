@@ -46,6 +46,7 @@ dependencies:
   cached_network_image: ^3.3.0
   android_alarm_manager_plus: ^3.0.4
   cron: ^0.5.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
