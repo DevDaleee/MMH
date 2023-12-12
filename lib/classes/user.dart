@@ -1,3 +1,5 @@
+// ignore_for_file: dead_null_aware_expression
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/shared/base_model.dart';
