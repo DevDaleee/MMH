@@ -1,14 +1,17 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_local_variable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/classes/entities.dart';
 import 'package:mmh/components/app_color.dart';
 import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/services/get_entities.dart';
 
 class TelaInicial extends StatefulWidget {
-  const TelaInicial({Key? key}) : super(key: key);
+  const TelaInicial({super.key});
 
   @override
   State<TelaInicial> createState() => _TelaInicialState();
@@ -22,6 +25,10 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
   final _entityService = EntityService();
   late Object entityOfTheDay;
   List<Entities> userGuesses = [];
+  final UserStatistics userStats = UserStatistics();
+  final user = FirebaseAuth.instance.currentUser;
+
+  bool gameOver = false;
 
   @override
   void initState() {
@@ -32,7 +39,6 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
   Future<void> fetchEntity() async {
     try {
       entityOfTheDay = await _entityService.getEntityOfTheDay(context);
-      print(entityOfTheDay);
       setState(() {});
     } catch (err) {
       showSnackBar(context: context, texto: "$err");
@@ -59,11 +65,18 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                   '';
 
           if (userGuess.toLowerCase() == correctAnswer) {
+            tFeitas++;
+            tentativas--;
             showSnackBar(
               context: context,
               texto: "Parabéns, você acertou!",
               isError: false,
             );
+            DocumentReference userDocument =
+                FirebaseFirestore.instance.collection('users').doc(user?.uid);
+            UserStatistics userStatistics = UserStatistics();
+            userStatistics.updateStatistics(true, userDocument);
+            gameOver = true;
           } else {
             tFeitas++;
             tentativas--;
@@ -71,6 +84,11 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
             if (tentativas <= 0) {
               showSnackBar(
                   context: context, texto: "Suas tentativas acabaram!");
+              DocumentReference userDocument =
+                  FirebaseFirestore.instance.collection('users').doc(user?.uid);
+              UserStatistics userStatistics = UserStatistics();
+              userStatistics.updateStatistics(true, userDocument);
+              gameOver = true;
             }
           }
 
@@ -84,6 +102,7 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
               context: context,
               texto: "Erro: Tipo de entidade do dia inválido");
         }
+
         _try.clear();
       } else {
         showSnackBar(
@@ -93,19 +112,19 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
     }
   }
 
-  Widget buildCharacteristicsIndicators(Map<String, dynamic> characteristics) {
+  Widget buildCharacteristicsIndicators(
+      Map<String, dynamic> characteristics, Entities userGuess) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var entry in characteristics.entries)
-            CharacteristicsIndicator(
-              label: entry.key,
-              userGuess: _try.text,
-              correctAnswer: (entityOfTheDay as Map<String, dynamic>)[entry.key]
-                      ?.toString() ??
-                  '',
+          CharacteristicsIndicator(
+            userGuess: userGuess,
+            correctAnswer: Entities.fromFirestore(
+              (entityOfTheDay as Map<String, dynamic>),
             ),
+          ),
         ],
       ),
     );
@@ -116,34 +135,35 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
       shrinkWrap: true,
       itemCount: userGuesses.length,
       itemBuilder: (context, index) {
-        Entities guess = userGuesses[index];
+        Entities guessEntity = userGuesses[index];
 
-        // Gere uma chave única para cada card
         Key cardKey = Key("card_$index");
 
         return Card(
-          key: cardKey, // Defina a chave para identificar este card
+          key: cardKey,
           child: Column(
             children: [
               ListTile(
-                title: Text("Palpite: ${guess.name}"),
+                title: Text("Palpite: ${guessEntity.name}"),
               ),
-              FutureBuilder<Entities?>(
-                future: _entityService.getEntityByName(guess.name),
+              FutureBuilder<Map<String, dynamic>?>(
+                future: Entities.getDocumentByName(guessEntity.name),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text("Erro: ${snapshot.error}");
-                  } else if (snapshot.hasData) {
-                    final guessedEntity = snapshot.data!.toFirestore();
+                  if (snapshot.hasData) {
+                    final guessedEntity =
+                        Entities.fromFirestore(snapshot.data!);
 
-                    return buildCharacteristicsIndicators(guessedEntity);
-                  } else {
-                    return showSnackBar(
-                      context: context,
-                      texto: "Entidade não encontrada",
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildCharacteristicsIndicators(
+                          guessedEntity.toJson(),
+                          guessEntity, // Alteração aqui
+                        ),
+                      ],
                     );
+                  } else {
+                    return Container();
                   }
                 },
               ),
@@ -181,26 +201,51 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                     style: TextStyle(color: Color(0xffA6BD94), fontSize: 30),
                   ),
                   Container(
-                    height: 40, // Defina uma altura específica aqui
+                    height: 40,
                   ),
-                  TextFormField(
-                    controller: _try,
-                    style: const TextStyle(color: Colors.white),
-                    keyboardType: TextInputType.emailAddress,
-                    //onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
-                      labelText: 'Digite aqui um mob',
-                      hintText: 'Axolote',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (email) => combine(
-                      [
-                        () => isNotEmpty(email),
-                        () => hasFiveChars(email),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _try,
+                          style: const TextStyle(color: Color(0xffA6BD94)),
+                          keyboardType: TextInputType.emailAddress,
+                          enabled: !gameOver,
+                          decoration: const InputDecoration(
+                            hintStyle: TextStyle(color: Color(0xffA6BD94)),
+                            labelStyle: TextStyle(color: Color(0xffA6BD94)),
+                            labelText: 'Digite aqui um mob',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xffA6BD94))),
+                          ),
+                          validator: (email) => combine(
+                            [
+                              () => isNotEmpty(email),
+                              () => hasFiveChars(email),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      TextButton(
+                        onPressed: () async {
+                          await checkGuess();
+                          await fetchEntity();
+                        },
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(
+                            const Size.square(65),
+                          ),
+                          foregroundColor: MaterialStateProperty.all(
+                            const Color(0xffA6BD94),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.send,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
@@ -218,16 +263,12 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                       ),
                     ],
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await checkGuess();
-                      await fetchEntity();
-                    },
-                    child: const Text("Enviar Palpite"),
-                  ),
                   const SizedBox(height: 20),
-                  SingleChildScrollView(
-                    child: buildGuessCards(),
+                  SizedBox(
+                    width: 300,
+                    child: SingleChildScrollView(
+                      child: buildGuessCards(),
+                    ),
                   ),
                 ],
               ),

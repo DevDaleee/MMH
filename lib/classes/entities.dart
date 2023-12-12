@@ -15,15 +15,12 @@ class Entities {
     required this.type,
   });
 
-  factory Entities.fromFirestore(Map<String, dynamic> json) {
-    return Entities(
-      category: json['category'] ?? '',
-      health: json['health'] ?? 0,
-      name: json['name'] ?? '',
-      spawn: json['spawn'] ?? '',
-      type: json['type'] ?? '',
-    );
-  }
+  Entities.fromFirestore(Map<String, dynamic> data)
+      : category = data['category'],
+        health = data['health'],
+        name = data['name'],
+        spawn = data['spawn'],
+        type = data['type'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -45,24 +42,39 @@ class Entities {
     };
   }
 
-  static Future<dynamic> getPropertyByName(
-      String propertyName, String entityName) async {
+  static Future<Map<String, dynamic>?> getDocumentByName(String name) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('entities')
-          .doc(entityName)
-          .get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('entities')
+              .where('name', isEqualTo: name)
+              .limit(1)
+              .get();
 
-      Map<String, dynamic>? data = snapshot.data();
-      if (data != null && data.containsKey(propertyName)) {
-        return data[propertyName];
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs[0].data();
       } else {
-        throw ArgumentError(
-            'A propriedade "$propertyName" não existe na entidade "$entityName".');
+        return null;
       }
     } catch (e) {
-      throw ArgumentError('Erro ao obter propriedade: $e');
+      throw ArgumentError('Erro ao obter documento: $e');
+    }
+  }
+
+  dynamic getProperty(String propertyName) {
+    switch (propertyName) {
+      case 'category':
+        return category;
+      case 'health':
+        return health;
+      case 'name':
+        return name;
+      case 'spawn':
+        return spawn;
+      case 'type':
+        return type;
+      default:
+        throw ArgumentError('Propriedade desconhecida: $propertyName');
     }
   }
 }

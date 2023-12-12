@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:mmh/classes/entities.dart';
 
 class FetchUser {
@@ -22,7 +23,9 @@ class FetchUser {
             .toList();
       }
     } on Exception catch (e) {
-      print('ERROR: $e');
+      SnackBar(
+        content: Text('ERROR: $e'),
+      );
     }
 
     return results;

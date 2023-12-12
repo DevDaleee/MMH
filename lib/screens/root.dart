@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mmh/named_routes.dart';
+import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/screens/main_page.dart';
 import 'package:mmh/services/auth.dart';
 
@@ -11,12 +12,29 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
+  late final UserStatistics userStats;
+
+  @override
+  void initState() {
+    super.initState();
+    userStats = UserStatistics();
+    userStats.readStatsFromSharedPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF324E3F),
         iconTheme: const IconThemeData(color: Color(0xffA6BD94)),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.stacked_bar_chart, color: Color(0xffA6BD94)),
+            onPressed: () {
+              userStats.displayStatistics(context);
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF38453E),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mmh/classes/entities.dart';
 import 'package:mmh/components/api.dart';
 
-class SearchUser extends SearchDelegate {
+class SearchEntities extends SearchDelegate {
   final FetchUser _entities = FetchUser();
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -44,17 +44,17 @@ class SearchUser extends SearchDelegate {
               title: Row(
                 children: [
                   Container(
-                    width: 60,
-                    height: 60,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent,
+                      color: const Color(0xffA6BD94),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
                       child: Text(
-                        '${data?[index]}',
+                        '${data?[index].name}',
                         style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                         overflow: TextOverflow.clip,
@@ -66,9 +66,24 @@ class SearchUser extends SearchDelegate {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${data?[index].name}',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
+                        "Categoria: ${data?[index].category}",
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      Text(
+                        "Spawn: ${data?[index].spawn}",
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      Text(
+                        "Tipo: ${data?[index].type}",
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                      Text(
+                        "Vida: ${data?[index].health}",
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ],
                   ),
