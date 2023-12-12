@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mmh/classes/entities.dart';
-import 'package:mmh/components/api.dart';
+import 'package:mmh/providers/api.dart';
 
 class SearchEntities extends SearchDelegate {
   final FetchUser _entities = FetchUser();

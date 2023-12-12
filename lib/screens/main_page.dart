@@ -7,6 +7,7 @@ import 'package:mmh/classes/entities.dart';
 import 'package:mmh/components/app_color.dart';
 import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/providers/count_down.dart';
 import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/services/get_entities.dart';
 
@@ -27,13 +28,19 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
   List<Entities> userGuesses = [];
   final UserStatistics userStats = UserStatistics();
   final user = FirebaseAuth.instance.currentUser;
-
+  final CountdownTimer _countdownTimer = CountdownTimer();
   bool gameOver = false;
 
   @override
   void initState() {
     super.initState();
     fetchEntity();
+  }
+
+  @override
+  void dispose() {
+    _countdownTimer.dispose();
+    super.dispose();
   }
 
   Future<void> fetchEntity() async {
@@ -203,6 +210,26 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                   Container(
                     height: 40,
                   ),
+                  Visibility(
+                    visible: gameOver,
+                    child: StreamBuilder<Duration>(
+                      stream: _countdownTimer.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final timeRemaining = snapshot.data!;
+                          return Text(
+                            'Tempo Restante: ${timeRemaining.inHours}:${(timeRemaining.inMinutes % 60).toString().padLeft(2, '0')}:${(timeRemaining.inSeconds % 60).toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Color(0xffA6BD94),
+                            ),
+                          );
+                        } else {
+                          return const Text('Carregando...');
+                        }
+                      },
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -222,7 +249,6 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                           validator: (email) => combine(
                             [
                               () => isNotEmpty(email),
-                              () => hasFiveChars(email),
                             ],
                           ),
                         ),

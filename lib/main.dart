@@ -8,7 +8,7 @@ import 'package:mmh/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mmh/screens/root.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+import 'services/firebase_options.dart';
 
 const kWebRecaptchaSiteKey = 'f702b7a3-681e-45cc-8f52-5d218a340586';
 
