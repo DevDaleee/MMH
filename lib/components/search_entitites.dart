@@ -52,7 +52,7 @@ class SearchUser extends SearchDelegate {
                     ),
                     child: Center(
                       child: Text(
-                        '${data?[index].id}',
+                        '${data?[index]}',
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
