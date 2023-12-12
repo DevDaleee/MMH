@@ -5,7 +5,7 @@ import 'package:mmh/named_routes.dart';
 import 'package:mmh/services/auth.dart'; // Importe a classe SearchEntities aqui
 
 class HelpPage extends StatefulWidget {
-  const HelpPage({Key? key}) : super(key: key);
+  const HelpPage({super.key});
 
   @override
   State<HelpPage> createState() => _HelpPageState();
