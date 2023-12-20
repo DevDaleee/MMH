@@ -103,7 +103,7 @@ class UserStatistics {
     );
   }
 
-  Future<void> syncStatsWithFirestore(DocumentReference userDocument) async {
+  void syncStatsWithFirestore(DocumentReference userDocument) async {
     DocumentSnapshot userSnapshot = await userDocument.get();
     Map<String, dynamic>? userData =
         userSnapshot.data() as Map<String, dynamic>?;
@@ -111,16 +111,25 @@ class UserStatistics {
     if (userData != null) {
       totalGamesPlayed = userData['gamesPlayed'] ?? 0;
       totalGamesWon = userData['gamesWon'] ?? 0;
-      winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
+
+      // Check if totalGamesPlayed is not zero before calculating winPercentage
+      if (totalGamesPlayed != 0) {
+        winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
+      } else {
+        winPercentage = 0;
+      }
+
       currentStreak = userData['streak'] ?? 0;
       maxStreak = userData['maxStreak'] ?? 0;
 
       saveStatsToSharedPreferences();
+    } else {
+      print('User data is null');
     }
   }
 
   void updateStatistics(bool gameWon, DocumentReference userDocument) async {
-    await syncStatsWithFirestore(userDocument);
+    syncStatsWithFirestore(userDocument);
 
     totalGamesPlayed++;
     if (gameWon) {

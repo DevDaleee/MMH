@@ -7,6 +7,7 @@ import 'package:mmh/classes/entities.dart';
 import 'package:mmh/components/app_color.dart';
 import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/providers/count_down.dart';
 <<<<<<< HEAD
 =======
 import 'package:mmh/providers/game_stats.dart';
@@ -20,7 +21,8 @@ class TelaInicial extends StatefulWidget {
   State<TelaInicial> createState() => _TelaInicialState();
 }
 
-class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
+class _TelaInicialState extends State<TelaInicial>
+    with ValidationsMixin, AutomaticKeepAliveClientMixin {
   final _formKey = GlobalKey<FormState>();
   final _try = TextEditingController();
   int tentativas = 6;
@@ -30,21 +32,30 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
   List<Entities> userGuesses = [];
   final UserStatistics userStats = UserStatistics();
   final user = FirebaseAuth.instance.currentUser;
-
+  final CountdownTimer _countdownTimer = CountdownTimer();
   bool gameOver = false;
 
-<<<<<<< HEAD
-=======
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
     fetchEntity();
   }
 
+  @override
+  void dispose() {
+    _countdownTimer.dispose();
+    super.dispose();
+  }
+
   Future<void> fetchEntity() async {
     try {
-      entityOfTheDay = await _entityService.getEntityOfTheDay(context);
-      setState(() {});
+      Object fetchedEntity = await _entityService.getEntityOfTheDay(context);
+      setState(() {
+        entityOfTheDay = fetchedEntity;
+      });
     } catch (err) {
       showSnackBar(context: context, texto: "$err");
     }
@@ -58,7 +69,9 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
       Entities? guessedEntity;
 
       if (entityData != null) {
-        guessedEntity = entityData;
+        setState(() {
+          guessedEntity = entityData;
+        });
       }
 
       if (guessedEntity != null) {
@@ -70,8 +83,11 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                   '';
 
           if (userGuess.toLowerCase() == correctAnswer) {
-            tFeitas++;
-            tentativas--;
+            setState(() {
+              tFeitas++;
+              tentativas--;
+              gameOver = true;
+            });
             showSnackBar(
               context: context,
               texto: "Parabéns, você acertou!",
@@ -81,25 +97,29 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                 FirebaseFirestore.instance.collection('users').doc(user?.uid);
             UserStatistics userStatistics = UserStatistics();
             userStatistics.updateStatistics(true, userDocument);
-            gameOver = true;
           } else {
-            tFeitas++;
-            tentativas--;
-
+            setState(() {
+              tFeitas++;
+              tentativas--;
+            });
             if (tentativas <= 0) {
+              setState(() {
+                tFeitas++;
+                tentativas--;
+                gameOver = true;
+              });
               showSnackBar(
                   context: context, texto: "Suas tentativas acabaram!");
               DocumentReference userDocument =
                   FirebaseFirestore.instance.collection('users').doc(user?.uid);
               UserStatistics userStatistics = UserStatistics();
               userStatistics.updateStatistics(true, userDocument);
-              gameOver = true;
             }
           }
 
           setState(() {
             if (guessedEntity != null) {
-              userGuesses.add(guessedEntity);
+              userGuesses.add(guessedEntity!);
             }
           });
         } else {
@@ -163,7 +183,7 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                       children: [
                         buildCharacteristicsIndicators(
                           guessedEntity.toJson(),
-                          guessEntity, // Alteração aqui
+                          guessEntity,
                         ),
                       ],
                     );
@@ -178,10 +198,10 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
       },
     );
   }
->>>>>>> Criando_Logica_Jogo
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: GestureDetector(
@@ -209,6 +229,26 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                   Container(
                     height: 40,
                   ),
+                  Visibility(
+                    visible: gameOver,
+                    child: StreamBuilder<Duration>(
+                      stream: _countdownTimer.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final timeRemaining = snapshot.data!;
+                          return Text(
+                            'Tempo Restante: ${timeRemaining.inHours}:${(timeRemaining.inMinutes % 60).toString().padLeft(2, '0')}:${(timeRemaining.inSeconds % 60).toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Color(0xffA6BD94),
+                            ),
+                          );
+                        } else {
+                          return const Text('Carregando...');
+                        }
+                      },
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -228,7 +268,6 @@ class _TelaInicialState extends State<TelaInicial> with ValidationsMixin {
                           validator: (email) => combine(
                             [
                               () => isNotEmpty(email),
-                              () => hasFiveChars(email),
                             ],
                           ),
                         ),
