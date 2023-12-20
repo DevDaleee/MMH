@@ -1,30 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-<<<<<<< HEAD
-import 'package:mmh/classes/entities.dart';
-=======
 import 'package:flutter/material.dart';
 import 'package:mmh/classes/entities.dart';
-import 'package:mmh/components/snackbar.dart'; // Make sure to import the material package for BuildContext
->>>>>>> Criando_Logica_Jogo
+import 'package:mmh/components/snackbar.dart';
 
 class EntityService {
   final CollectionReference entitiesCollection =
-      FirebaseFirestore.instance.collection('entitieOfTheDay');
+      FirebaseFirestore.instance.collection('entities');
 
-<<<<<<< HEAD
-  Future<Entities> getEntity() async {
-    Object etod = await getRandomEntity();
-    return etod as Entities;
-=======
   final CollectionReference entitiesOfTheDayCollection =
       FirebaseFirestore.instance.collection('entitieOfTheDay');
 
   Future<Object> getEntityOfTheDay(BuildContext context) async {
     Object entityOfTheDay = await getEntity(context);
     return entityOfTheDay;
->>>>>>> Criando_Logica_Jogo
   }
 
   Future<Entities?> getEntityByName(String name) async {
