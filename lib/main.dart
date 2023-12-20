@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/providers/user_provider.dart';
 import 'package:mmh/routes.dart';
-import 'package:mmh/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mmh/screens/login_page.dart';
 import 'package:mmh/screens/root.dart';
 import 'package:provider/provider.dart';
 import 'services/firebase_options.dart';
@@ -19,6 +19,10 @@ Future main() async {
     appleProvider: AppleProvider.appAttest,
     webProvider: ReCaptchaV3Provider(kWebRecaptchaSiteKey),
   );
+<<<<<<< HEAD
+
+=======
+>>>>>>> Criando_Logica_Jogo
   runApp(const MyApp());
 }
 
@@ -45,8 +49,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-class GoogleFonts {}
 
 class RoteadorTela extends StatelessWidget {
   const RoteadorTela({Key? key});

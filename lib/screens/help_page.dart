@@ -166,7 +166,7 @@ class _HelpPageState extends State<HelpPage> {
                 title: const Text("Sair"),
                 textColor: Colors.white,
                 onTap: () {
-                  ServiceAuth().sair();
+                  ServiceAuth().sair(context);
                 },
               ),
             ),

@@ -8,8 +8,11 @@ import 'package:mmh/components/app_color.dart';
 import 'package:mmh/components/snackbar.dart';
 import 'package:mmh/components/validations_mixin.dart';
 import 'package:mmh/providers/count_down.dart';
+<<<<<<< HEAD
+=======
 import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/services/get_entities.dart';
+>>>>>>> Criando_Logica_Jogo
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
