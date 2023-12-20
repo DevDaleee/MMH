@@ -39,7 +39,9 @@ class _RankingPageState extends State<RankingPage> {
                       title: const Text("Inicial"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pushNamed(context, InitialViewRoute);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                     ListTile(

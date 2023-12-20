@@ -52,8 +52,7 @@ class _RootState extends State<Root> {
                       title: const Text("Perfil"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(ProfileViewRoute);
+                        Navigator.pushNamed(context, ProfileViewRoute);
                       },
                     ),
                     ListTile(

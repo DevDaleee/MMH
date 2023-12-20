@@ -129,7 +129,9 @@ class _HelpPageState extends State<HelpPage> {
                       title: const Text("Inicial"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pushNamed(context, InitialViewRoute);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                     ListTile(
@@ -142,13 +144,12 @@ class _HelpPageState extends State<HelpPage> {
                       },
                     ),
                     ListTile(
-                      leading: const Icon(Icons.help_center,
+                      leading: const Icon(Icons.emoji_events,
                           color: Color(0xffA6BD94)),
-                      title: const Text("Entidades"),
+                      title: const Text("Ranking"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(EntitiesTipsViewRoute);
+                        Navigator.pushNamed(context, RankingViewRoute);
                       },
                     ),
                   ],

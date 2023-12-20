@@ -24,6 +24,7 @@ Future main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
 class GoogleFonts {}
 
 class RoteadorTela extends StatelessWidget {
-  const RoteadorTela({super.key});
+  const RoteadorTela({Key? key});
 
   @override
   Widget build(BuildContext context) {
