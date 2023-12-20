@@ -54,7 +54,7 @@ class _TelaInicialState extends State<TelaInicial>
         entityOfTheDay = fetchedEntity;
       });
     } catch (err) {
-      showSnackBar(context: context, texto: "$err");
+      showSnackBar(context: context, texto: "ERRO: $err");
     }
   }
 
