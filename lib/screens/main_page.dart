@@ -307,7 +307,7 @@ class _TelaInicialState extends State<TelaInicial>
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
-                    width: 300,
+                    width: 250,
                     child: SingleChildScrollView(
                       child: buildGuessCards(),
                     ),
