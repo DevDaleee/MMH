@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mmh/classes/entities.dart';
 
 class CharacteristicsIndicator extends StatelessWidget {
@@ -26,11 +27,16 @@ class CharacteristicsIndicator extends StatelessWidget {
     var userGuessJson = userGuess.toJson();
 
     for (var key in userGuessJson.keys) {
+      if (key == "name") {
+        continue;
+      }
+
       var value = userGuessJson[key];
       var characteristicString = "$key: $value";
       if (processedCharacteristics.contains(characteristicString)) {
         continue;
       }
+
       widgets.add(
         Row(
           children: [
@@ -47,13 +53,40 @@ class CharacteristicsIndicator extends StatelessWidget {
               characteristicString,
               style: TextStyle(color: _getIndicatorColor(key), fontSize: 15),
             ),
+            if (key == "health") ...[
+              const SizedBox(width: 5),
+              _buildHealthIcon(value),
+            ],
           ],
         ),
       );
+
       processedCharacteristics.add(characteristicString);
     }
-
     return widgets;
+  }
+
+  Widget _buildHealthIcon(dynamic healthValue) {
+    if (healthValue == null) {
+      return SizedBox.shrink();
+    }
+
+    int threshold = correctAnswer.getProperty("health") ?? 25;
+    final IconData iconData;
+    Color iconColor;
+
+    if (healthValue > threshold) {
+      iconData = FontAwesomeIcons.anglesDown;
+      iconColor = Colors.red;
+    } else if (healthValue < threshold) {
+      iconData = FontAwesomeIcons.anglesUp;
+      iconColor = Colors.red;
+    } else {
+      iconData = FontAwesomeIcons.equals;
+      iconColor = Colors.green;
+    }
+
+    return Icon(iconData, color: iconColor, size: 14);
   }
 
   Color _getIndicatorColor(String property) {

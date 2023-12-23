@@ -27,6 +27,7 @@ class _TelaInicialState extends State<TelaInicial>
   final _entityService = EntityService();
   late Object entityOfTheDay;
   List<Entities> userGuesses = [];
+  Set<String> triedGuesses = Set<String>();
   final UserStatistics userStats = UserStatistics();
   final user = FirebaseAuth.instance.currentUser;
   final CountdownTimer _countdownTimer = CountdownTimer();
@@ -70,6 +71,16 @@ class _TelaInicialState extends State<TelaInicial>
           guessedEntity = entityData;
         });
       }
+      if (triedGuesses.contains(userGuess)) {
+        showSnackBar(
+          context: context,
+          texto: "Você já tentou essa entidade. Tente outra!",
+          isError: true,
+        );
+        FocusScope.of(context).unfocus();
+        _try.clear();
+        return;
+      }
 
       if (guessedEntity != null) {
         if (entityOfTheDay is Map<String, dynamic>) {
@@ -84,6 +95,7 @@ class _TelaInicialState extends State<TelaInicial>
               tFeitas++;
               tentativas--;
               gameOver = true;
+              FocusScope.of(context).unfocus();
             });
             showSnackBar(
               context: context,
@@ -98,12 +110,14 @@ class _TelaInicialState extends State<TelaInicial>
             setState(() {
               tFeitas++;
               tentativas--;
+              FocusScope.of(context).unfocus();
             });
             if (tentativas <= 0) {
               setState(() {
                 tFeitas++;
                 tentativas--;
                 gameOver = true;
+                FocusScope.of(context).unfocus();
               });
               showSnackBar(
                   context: context, texto: "Suas tentativas acabaram!");
@@ -118,18 +132,21 @@ class _TelaInicialState extends State<TelaInicial>
             if (guessedEntity != null) {
               userGuesses.add(guessedEntity!);
             }
+            FocusScope.of(context).unfocus();
           });
         } else {
           showSnackBar(
               context: context,
               texto: "Erro: Tipo de entidade do dia inválido");
         }
-
+        FocusScope.of(context).unfocus();
+        triedGuesses.add(userGuess);
         _try.clear();
       } else {
         showSnackBar(
             context: context,
             texto: "Entidade não encontrada. Tente novamente!");
+        FocusScope.of(context).unfocus();
       }
     }
   }
@@ -156,9 +173,9 @@ class _TelaInicialState extends State<TelaInicial>
     return ListView.builder(
       shrinkWrap: true,
       itemCount: userGuesses.length,
+      reverse: true,
       itemBuilder: (context, index) {
         Entities guessEntity = userGuesses[index];
-
         Key cardKey = Key("card_$index");
 
         return Card(
@@ -307,7 +324,7 @@ class _TelaInicialState extends State<TelaInicial>
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
-                    width: 220,
+                    width: 250,
                     child: SingleChildScrollView(
                       child: buildGuessCards(),
                     ),
