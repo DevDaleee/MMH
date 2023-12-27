@@ -194,8 +194,7 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
               ).then(
                 (_) {
                   Navigator.pushNamed(context, InitialViewRoute).then((_) {
-                    Navigator.pop(
-                        context); 
+                    Navigator.pop(context);
                   });
                 },
               ).catchError(

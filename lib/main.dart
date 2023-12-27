@@ -1,6 +1,8 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mmh/providers/game_stats.dart';
+import 'package:mmh/providers/home_provider.dart';
 import 'package:mmh/providers/user_provider.dart';
 import 'package:mmh/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => GameProvider(context)),
+        ChangeNotifierProvider.value(value: UserStatistics()),
         ChangeNotifierProvider.value(value: UserProvider()),
       ],
       child: MaterialApp(

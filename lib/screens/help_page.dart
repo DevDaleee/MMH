@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mmh/components/search_entitites.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/services/auth.dart'; // Importe a classe SearchEntities aqui
+import 'package:mmh/services/auth.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({super.key});
@@ -129,9 +129,7 @@ class _HelpPageState extends State<HelpPage> {
                       title: const Text("Inicial"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context, InitialViewRoute);
                       },
                     ),
                     ListTile(

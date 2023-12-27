@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserStatistics {
+//Passou a ser um provider
+class UserStatistics extends ChangeNotifier {
   int totalGamesPlayed = 0;
   int totalGamesWon = 0;
   int winPercentage = 0;

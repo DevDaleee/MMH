@@ -5,6 +5,7 @@ import 'package:mmh/providers/game_stats.dart';
 import 'package:mmh/shared/base_model.dart';
 
 class User extends BaseModel {
+  late String uid;
   late String _documentId;
   late String email;
   late String nick;
@@ -18,7 +19,7 @@ class User extends BaseModel {
   User.fromMap(DocumentSnapshot document, UserStatistics statistics) {
     _documentId = document.id;
     Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
-
+    uid = data?['uid'] ?? "Não informado";
     email = data?['email'] ?? "Não Informado";
     nick = data?['nick'] ?? "Não Informado";
     gamesPlayed = statistics.totalGamesPlayed ?? 0;
@@ -32,6 +33,7 @@ class User extends BaseModel {
   @override
   toMap() {
     var map = <String, dynamic>{};
+    map['uid'] = uid;
     map['email'] = email;
     map['nick'] = nick;
     map['gamesPlayed'] = gamesPlayed;

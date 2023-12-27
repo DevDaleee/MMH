@@ -35,9 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       title: const Text("Inicial"),
                       textColor: Colors.white,
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context, InitialViewRoute);
                       },
                     ),
                     ListTile(
