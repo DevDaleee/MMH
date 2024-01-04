@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//Passou a ser um provider
 class UserStatistics extends ChangeNotifier {
   int totalGamesPlayed = 0;
   int totalGamesWon = 0;
@@ -29,13 +28,17 @@ class UserStatistics extends ChangeNotifier {
 
   void saveStatsToSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('stats', [
-      totalGamesPlayed.toString(),
-      totalGamesWon.toString(),
-      winPercentage.toString(),
-      currentStreak.toString(),
-      maxStreak.toString(),
-    ]);
+    prefs.setStringList(
+      'stats',
+      [
+        totalGamesPlayed.toString(),
+        totalGamesWon.toString(),
+        winPercentage.toString(),
+        currentStreak.toString(),
+        maxStreak.toString(),
+      ],
+    );
+    notifyListeners();
   }
 
   void displayStatistics(BuildContext context) {
@@ -49,7 +52,7 @@ class UserStatistics extends ChangeNotifier {
             style: TextStyle(fontSize: 18, color: Color(0xffA6BD94)),
           ),
           content: SizedBox(
-            height: 170, // Ajuste a altura conforme necessário
+            height: 170,
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,6 +127,7 @@ class UserStatistics extends ChangeNotifier {
       maxStreak = userData['maxStreak'] ?? 0;
 
       saveStatsToSharedPreferences();
+      notifyListeners();
     } else {
       print('User data is null');
     }
@@ -146,14 +150,17 @@ class UserStatistics extends ChangeNotifier {
     int points = calculatePoints(currentStreak);
     saveStatsToSharedPreferences();
 
-    userDocument.update({
-      'gamesPlayed': FieldValue.increment(1),
-      'gamesWon': gameWon ? FieldValue.increment(1) : totalGamesWon,
-      'maxStreak': maxStreak,
-      'streak': currentStreak,
-      'winPercentage': winPercentage.toDouble(),
-      'points': FieldValue.increment(points),
-    });
+    userDocument.update(
+      {
+        'gamesPlayed': FieldValue.increment(1),
+        'gamesWon': gameWon ? FieldValue.increment(1) : totalGamesWon,
+        'maxStreak': maxStreak,
+        'streak': currentStreak,
+        'winPercentage': winPercentage.toDouble(),
+        'points': FieldValue.increment(points),
+      },
+    );
+    notifyListeners();
   }
 
   int calculatePoints(int attempts) {

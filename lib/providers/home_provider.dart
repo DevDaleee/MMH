@@ -42,6 +42,15 @@ class GameProvider extends ChangeNotifier {
     super.dispose();
   }
 
+  void restartGame() {
+    tentativas = 6;
+    tFeitas = 0;
+    entityOfTheDay;
+    userGuesses = [];
+    gameOver = false;
+    _initPreferences();
+  }
+
   void _saveGameState() {
     _preferences.setInt('tentativas', tentativas);
     _preferences.setInt('tFeitas', tFeitas);
