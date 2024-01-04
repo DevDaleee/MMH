@@ -10,7 +10,33 @@ class UserStatistics extends ChangeNotifier {
   int maxStreak = 0;
 
   UserStatistics() {
+    // Load stats from SharedPreferences when the provider is initialized
     readStatsFromSharedPreferences();
+  }
+
+  Future<void> loadStatsFromFirestore(DocumentReference userDocument) async {
+    DocumentSnapshot userSnapshot = await userDocument.get();
+    Map<String, dynamic>? userData =
+        userSnapshot.data() as Map<String, dynamic>?;
+
+    if (userData != null) {
+      totalGamesPlayed = userData['gamesPlayed'] ?? 0;
+      totalGamesWon = userData['gamesWon'] ?? 0;
+
+      if (totalGamesPlayed != 0) {
+        winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
+      } else {
+        winPercentage = 0;
+      }
+
+      currentStreak = userData['streak'] ?? 0;
+      maxStreak = userData['maxStreak'] ?? 0;
+
+      saveStatsToSharedPreferences();
+      notifyListeners();
+    } else {
+      print('User data is null');
+    }
   }
 
   void readStatsFromSharedPreferences() async {
@@ -39,6 +65,44 @@ class UserStatistics extends ChangeNotifier {
       ],
     );
     notifyListeners();
+  }
+
+  void updateStatistics(bool gameWon, DocumentReference userDocument) async {
+    await loadStatsFromFirestore(userDocument);
+
+    totalGamesPlayed++;
+    if (gameWon) {
+      totalGamesWon++;
+      currentStreak++;
+    } else {
+      currentStreak = 0;
+    }
+    if (currentStreak > maxStreak) {
+      maxStreak = currentStreak;
+    }
+    winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
+    int points = calculatePoints(currentStreak);
+    saveStatsToSharedPreferences();
+
+    userDocument.update(
+      {
+        'gamesPlayed': FieldValue.increment(1),
+        'gamesWon': gameWon ? FieldValue.increment(1) : totalGamesWon,
+        'maxStreak': maxStreak,
+        'streak': currentStreak,
+        'winPercentage': winPercentage.toDouble(),
+        'points': FieldValue.increment(points),
+      },
+    );
+    notifyListeners();
+  }
+
+  int calculatePoints(int attempts) {
+    if (attempts >= 1 && attempts <= 6) {
+      return 7 - attempts;
+    } else {
+      return 0;
+    }
   }
 
   void displayStatistics(BuildContext context) {
@@ -105,69 +169,5 @@ class UserStatistics extends ChangeNotifier {
         );
       },
     );
-  }
-
-  void syncStatsWithFirestore(DocumentReference userDocument) async {
-    DocumentSnapshot userSnapshot = await userDocument.get();
-    Map<String, dynamic>? userData =
-        userSnapshot.data() as Map<String, dynamic>?;
-
-    if (userData != null) {
-      totalGamesPlayed = userData['gamesPlayed'] ?? 0;
-      totalGamesWon = userData['gamesWon'] ?? 0;
-
-      // Check if totalGamesPlayed is not zero before calculating winPercentage
-      if (totalGamesPlayed != 0) {
-        winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
-      } else {
-        winPercentage = 0;
-      }
-
-      currentStreak = userData['streak'] ?? 0;
-      maxStreak = userData['maxStreak'] ?? 0;
-
-      saveStatsToSharedPreferences();
-      notifyListeners();
-    } else {
-      print('User data is null');
-    }
-  }
-
-  void updateStatistics(bool gameWon, DocumentReference userDocument) async {
-    syncStatsWithFirestore(userDocument);
-
-    totalGamesPlayed++;
-    if (gameWon) {
-      totalGamesWon++;
-      currentStreak++;
-    } else {
-      currentStreak = 0;
-    }
-    if (currentStreak > maxStreak) {
-      maxStreak = currentStreak;
-    }
-    winPercentage = ((totalGamesWon / totalGamesPlayed) * 100).toInt();
-    int points = calculatePoints(currentStreak);
-    saveStatsToSharedPreferences();
-
-    userDocument.update(
-      {
-        'gamesPlayed': FieldValue.increment(1),
-        'gamesWon': gameWon ? FieldValue.increment(1) : totalGamesWon,
-        'maxStreak': maxStreak,
-        'streak': currentStreak,
-        'winPercentage': winPercentage.toDouble(),
-        'points': FieldValue.increment(points),
-      },
-    );
-    notifyListeners();
-  }
-
-  int calculatePoints(int attempts) {
-    if (attempts >= 1 && attempts <= 6) {
-      return 7 - attempts;
-    } else {
-      return 0;
-    }
   }
 }
