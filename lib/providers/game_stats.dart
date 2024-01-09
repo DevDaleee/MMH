@@ -10,7 +10,6 @@ class UserStatistics extends ChangeNotifier {
   int maxStreak = 0;
 
   UserStatistics() {
-    // Load stats from SharedPreferences when the provider is initialized
     readStatsFromSharedPreferences();
   }
 

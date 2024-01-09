@@ -9,11 +9,12 @@ showSnackBar(
     backgroundColor: (isError) ? Colors.red : Colors.green,
     duration: const Duration(seconds: 5),
     action: SnackBarAction(
-        label: "Ok",
-        textColor: Colors.white,
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        }),
+      label: "Ok",
+      textColor: Colors.white,
+      onPressed: () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
+    ),
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

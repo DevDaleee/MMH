@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +66,11 @@ class GameProvider extends ChangeNotifier {
       entityOfTheDay = fetchedEntity;
       notifyListeners();
     } catch (err) {
-      showSnackBar(context: context, texto: "ERRO: $err");
+      showSnackBar(
+        context: context,
+        texto: "Estamos com problemas no servidor, volte mais tarde!",
+        isError: true,
+      );
     }
   }
 
@@ -77,7 +79,6 @@ class GameProvider extends ChangeNotifier {
     if (_formKey.currentState?.validate() ?? false) {
       String userGuess = _try.text;
       Entities? entityData = await _entityService.getEntityByName(userGuess);
-
       Entities? guessedEntity;
 
       if (entityData != null) {
@@ -159,7 +160,9 @@ class GameProvider extends ChangeNotifier {
   }
 
   Widget buildCharacteristicsIndicators(
-      Map<String, dynamic> characteristics, Entities userGuess) {
+    Map<String, dynamic> characteristics,
+    Entities userGuess,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -177,46 +180,56 @@ class GameProvider extends ChangeNotifier {
   }
 
   Widget buildGuessCards() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: userGuesses.length,
-      reverse: true,
-      itemBuilder: (context, index) {
-        Entities guessEntity = userGuesses[index];
-        Key cardKey = Key("card_$index");
-
-        return Card(
-          key: cardKey,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text("Palpite: ${guessEntity.name}"),
-              ),
-              FutureBuilder<Map<String, dynamic>?>(
-                future: Entities.getDocumentByName(guessEntity.name),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final guessedEntity =
-                        Entities.fromFirestore(snapshot.data!);
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return Builder(
+      builder: (context) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: userGuesses.length,
+          reverse: true,
+          itemBuilder: (context, index) {
+            Entities guessEntity = userGuesses[index];
+            Key cardKey = Key("card_$index");
+        
+            return FutureBuilder<Map<String, dynamic>?>(
+              future: Entities.getDocumentByName(guessEntity.name),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final guessedEntity = Entities.fromFirestore(snapshot.data!);
+                  bool isCorrectGuess = guessedEntity == entityOfTheDay;
+                  Color cardColor = isCorrectGuess ? Colors.green : Colors.red;
+        
+                  return Card(
+                    key: cardKey,
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0),
+                        bottomRight: Radius.circular(8.0),
+                      ),
+                      side: BorderSide(width: 5, color: cardColor),
+                    ),
+                    child: Column(
                       children: [
+                        ListTile(
+                          title: Text("Palpite: ${guessEntity.name}"),
+                        ),
                         buildCharacteristicsIndicators(
                           guessedEntity.toJson(),
                           guessEntity,
                         ),
                       ],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            );
+          },
         );
-      },
+      }
     );
   }
 }

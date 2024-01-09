@@ -167,7 +167,10 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
             .fazerLogin(email: email, senha: senha)
             .then((String? erro) {
           if (erro != null) {
-            showSnackBar(context: context, texto: erro);
+            showSnackBar(
+                context: context,
+                texto: "Email ou Senha está errado, tente novamente!",
+                isError: true);
           }
           Navigator.pop(context);
         });
@@ -199,7 +202,12 @@ class LoginPageState extends State<LoginPage> with ValidationsMixin {
                 },
               ).catchError(
                 (error) {
-                  showSnackBar(context: context, texto: error.toString());
+                  showSnackBar(
+                    context: context,
+                    texto:
+                        "Senha Muito Curta (min de 5 digitos) ou Email Inválido!",
+                    isError: true,
+                  );
                   Navigator.pop(context);
                 },
               );
