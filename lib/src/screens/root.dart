@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/providers/game_stats.dart';
-import 'package:mmh/screens/main_page.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/src/providers/game_stats.dart';
+import 'package:mmh/src/screens/main_page.dart';
+import 'package:mmh/src/services/auth.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -51,27 +53,21 @@ class _RootState extends State<Root> {
                           const Icon(Icons.person, color: Color(0xffA6BD94)),
                       title: const Text("Perfil"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, ProfileViewRoute);
-                      },
+                      onTap: () => Get.to(ProfileViewRoute),
                     ),
                     ListTile(
                       leading: const Icon(Icons.emoji_events,
                           color: Color(0xffA6BD94)),
                       title: const Text("Rank"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, RankingViewRoute);
-                      },
+                      onTap: () => Get.to(RankingViewRoute),
                     ),
                     ListTile(
                       leading: const Icon(Icons.help_center,
                           color: Color(0xffA6BD94)),
                       title: const Text("Entidades"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, EntitiesTipsViewRoute);
-                      },
+                      onTap: () => Get.to(EntitiesTipsViewRoute),
                     ),
                   ],
                 ),

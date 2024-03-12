@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/classes/entities.dart';
+import 'package:mmh/src/models/entities.dart';
 
 class FetchUser {
   Future<List<Entities>> getEntities({String? query}) async {

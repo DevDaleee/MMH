@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/src/services/auth.dart';
 
 class RankingPage extends StatefulWidget {
   const RankingPage({super.key});
@@ -38,27 +39,21 @@ class _RankingPageState extends State<RankingPage> {
                           const Icon(Icons.house, color: Color(0xffA6BD94)),
                       title: const Text("Inicial"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, InitialViewRoute);
-                      },
+                      onTap: () => Get.to(InitialViewRoute),
                     ),
                     ListTile(
                       leading:
                           const Icon(Icons.person, color: Color(0xffA6BD94)),
                       title: const Text("Perfil"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, ProfileViewRoute);
-                      },
+                      onTap: () => Get.to(ProfileViewRoute),
                     ),
                     ListTile(
                       leading: const Icon(Icons.help_center,
                           color: Color(0xffA6BD94)),
                       title: const Text("Entidades"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, EntitiesTipsViewRoute);
-                      },
+                      onTap: () => Get.to(EntitiesTipsViewRoute),
                     ),
                   ],
                 ),

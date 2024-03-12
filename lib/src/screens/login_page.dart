@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/components/cmp_deco_auth_camp.dart';
-import 'package:mmh/components/loading.dart';
-import 'package:mmh/components/snackbar.dart';
-import 'package:mmh/components/validations_mixin.dart';
+import 'package:mmh/src/components/cmp_deco_auth_camp.dart';
+import 'package:mmh/src/components/loading.dart';
+import 'package:mmh/src/components/snackbar.dart';
+import 'package:mmh/src/components/validations_mixin.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/src/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

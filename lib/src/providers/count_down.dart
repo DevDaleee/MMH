@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:mmh/providers/home_provider.dart';
+import 'package:mmh/src/providers/home_provider.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart';
 

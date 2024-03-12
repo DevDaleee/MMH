@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/classes/entities.dart';
-import 'package:mmh/components/snackbar.dart';
+import 'package:mmh/src/models/entities.dart';
+import 'package:mmh/src/components/snackbar.dart';
 
 class EntityService {
   final CollectionReference entitiesCollection =

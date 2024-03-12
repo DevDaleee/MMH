@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/components/search_entitites.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:mmh/src/components/search_entitites.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/src/services/auth.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({super.key});
@@ -128,27 +130,21 @@ class _HelpPageState extends State<HelpPage> {
                           const Icon(Icons.house, color: Color(0xffA6BD94)),
                       title: const Text("Inicial"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, InitialViewRoute);
-                      },
+                      onTap: () => Get.to(InitialViewRoute),
                     ),
                     ListTile(
                       leading:
                           const Icon(Icons.person, color: Color(0xffA6BD94)),
                       title: const Text("Perfil"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, ProfileViewRoute);
-                      },
+                      onTap: () => Get.to(ProfileViewRoute),
                     ),
                     ListTile(
                       leading: const Icon(Icons.emoji_events,
                           color: Color(0xffA6BD94)),
                       title: const Text("Ranking"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, RankingViewRoute);
-                      },
+                      onTap: () => Get.to(RankingViewRoute),
                     ),
                   ],
                 ),

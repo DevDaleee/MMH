@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/classes/entities.dart';
-import 'package:mmh/components/app_color.dart';
-import 'package:mmh/components/snackbar.dart';
-import 'package:mmh/providers/game_stats.dart';
-import 'package:mmh/services/get_entities.dart';
+import 'package:mmh/src/models/entities.dart';
+import 'package:mmh/src/components/app_color.dart';
+import 'package:mmh/src/components/snackbar.dart';
+import 'package:mmh/src/providers/game_stats.dart';
+import 'package:mmh/src/services/get_entities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GameProvider extends ChangeNotifier {

@@ -1,4 +1,4 @@
-import 'package:mmh/classes/entities.dart';
+import 'package:mmh/src/models/entities.dart';
 
 class Game {
   int id;

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmh/named_routes.dart';
-import 'package:mmh/services/auth.dart';
+import 'package:mmh/src/services/auth.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -34,9 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const Icon(Icons.house, color: Color(0xffA6BD94)),
                       title: const Text("Inicial"),
                       textColor: Colors.white,
-                      onTap: () {
-                        Navigator.pushNamed(context, InitialViewRoute);
-                      },
+                      onTap: () => Get.to(InitialViewRoute),
                     ),
                     ListTile(
                       leading: const Icon(Icons.emoji_events,

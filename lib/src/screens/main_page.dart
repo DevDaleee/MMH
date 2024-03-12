@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mmh/components/validations_mixin.dart';
-import 'package:mmh/providers/count_down.dart';
-import 'package:mmh/providers/game_stats.dart';
-import 'package:mmh/providers/home_provider.dart';
+import 'package:mmh/src/components/validations_mixin.dart';
+import 'package:mmh/src/providers/count_down.dart';
+import 'package:mmh/src/providers/game_stats.dart';
+import 'package:mmh/src/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 
 class TelaInicial extends StatefulWidget {
